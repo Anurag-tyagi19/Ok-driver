@@ -4,7 +4,11 @@ import "./App.css";
 import CameraMap from "./CameraMap";
 import LiveMonitoring from "./LiveMonitoring";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+let rawApiBase = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+if (rawApiBase && !rawApiBase.startsWith("http")) {
+  rawApiBase = `https://${rawApiBase}`;
+}
+const API_BASE = rawApiBase;
 const WS_URL =
   import.meta.env.VITE_WS_URL ||
   (API_BASE.replace(/^http/, "ws") + "/ws");

@@ -1,6 +1,9 @@
 import React, { useMemo, useState } from "react";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+let API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+if (API_BASE && !API_BASE.startsWith("http")) {
+  API_BASE = `https://${API_BASE}`;
+}
 
 function LiveMonitoring({ cameras }) {
   const [selectedCamera, setSelectedCamera] = useState(null);
