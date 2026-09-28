@@ -1,0 +1,40 @@
+                         ┌──────────────────────┐
+                         │       WATCHLIST       │
+                         ├──────────────────────┤
+                         │ PK id                │
+                         │ identifier           │
+                         │ entity_type          │
+                         │ description          │
+                         │ is_active            │
+                         │ created_at           │
+                         └──────────┬───────────┘
+                                    │
+                              identifier
+                                matching
+                                    │
+                                    ▼
+┌──────────────────────┐     ┌──────────────────────┐
+│       CAMERAS        │     │      DETECTIONS      │
+├──────────────────────┤     ├──────────────────────┤
+│ PK id                │ 1:N │ PK id                │
+│ camera_code          ├────►│ camera_id            │
+│ name                 │     │ event_type           │
+│ department           │     │ vehicle_number      │
+│ latitude             │     │ confidence           │
+│ longitude            │     │ timestamp            │
+│ camera_type          │     └──────────┬───────────┘
+│ source_protocol      │                │
+│ stream_url           │                │ 1:N
+│ status               │                ▼
+│ zone                 │     ┌──────────────────────┐
+│ last_heartbeat       │     │        ALERTS        │
+│ is_active            │     ├──────────────────────┤
+│ created_at           │     │ PK id                │
+│ updated_at           │     │ detection_id         │
+└──────────────────────┘     │ camera_id            │
+                             │ identifier           │
+                             │ alert_type           │
+                             │ confidence           │
+                             │ status               │
+                             │ created_at            │
+                             └──────────────────────┘

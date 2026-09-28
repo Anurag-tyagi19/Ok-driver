@@ -1,0 +1,47 @@
+┌──────────────────────────────────────────────────────────────┐
+│                    CCTV VIDEO SOURCES                        │
+│                                                              │
+│       Camera 1 / MP4 Source       Camera 2 / MP4 Source     │
+└─────────────────────────┬────────────────────────────────────┘
+                          │
+                          │ Video Stream / Source
+                          ▼
+┌──────────────────────────────────────────────────────────────┐
+│                    AI / ANPR SIMULATOR                       │
+│                                                              │
+│  Generates detection events                                  │
+│  • Camera ID                                                 │
+│  • Vehicle Number                                            │
+│  • Event Type                                                │
+│  • Confidence                                                │
+└─────────────────────────┬────────────────────────────────────┘
+                          │
+                          │ POST Detection Event
+                          ▼
+┌──────────────────────────────────────────────────────────────┐
+│                    FASTAPI BACKEND                           │
+│                                                              │
+│ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐             │
+│ │Camera API   │ │Detection API│ │Watchlist API│             │
+│ └─────────────┘ └─────────────┘ └─────────────┘             │
+│                                                              │
+│ ┌─────────────┐ ┌─────────────┐ ┌────────────────────────┐  │
+│ │ Alert API   │ │Video API    │ │ Camera Health Service   │  │
+│ └─────────────┘ └─────────────┘ └────────────────────────┘  │
+│                                                              │
+│              WebSocket Manager                               │
+└───────────────┬──────────────────────────┬───────────────────┘
+                │                          │
+                │ SQLAlchemy               │ WebSocket
+                ▼                          ▼
+┌─────────────────────────┐       ┌───────────────────────────┐
+│      PostgreSQL         │       │     React Dashboard       │
+│                         │       │                           │
+│ • Cameras               │       │ • Camera Registry         │
+│ • Detections            │       │ • Live Monitoring         │
+│ • Watchlist             │       │ • Map                     │
+│ • Alerts                │       │ • Entity Search           │
+│                         │       │ • Watchlist               │
+└─────────────────────────┘       │ • Alert Center            │
+                                  │ • Real-time Events         │
+                                  └───────────────────────────┘

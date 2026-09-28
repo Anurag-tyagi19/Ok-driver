@@ -1,0 +1,78 @@
+version: "3.9"
+
+# ============================================================
+# OkDriver CCTV Intelligence Platform - Docker Compose
+# ============================================================
+# Run karo:
+#   docker-compose up --build
+#
+# Services:
+#   - db        : PostgreSQL database
+#   - backend   : FastAPI Python server
+#   - frontend  : React + Vite (dev server)
+# ============================================================
+
+services:
+
+  # ============================
+  # PostgreSQL Database
+  # ============================
+  db:
+    image: postgres:15
+    container_name: okdriver_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: okdriver
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d okdriver"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================
+  # FastAPI Backend
+  # ============================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: okdriver_backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://postgres:1234@db:5432/okdriver
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+
+  # ============================
+  # React Frontend (Dev)
+  # ============================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: okdriver_frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend/src:/app/src
+
+
+# ============================
+# Named Volumes
+# ============================
+volumes:
+  postgres_data:
