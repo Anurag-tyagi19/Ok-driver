@@ -48,7 +48,7 @@ services:
         fromService:
           type: web
           name: okdriver-backend
-          property: host
+          property: url
 
 # ------------------------------------------------------------
 # 3. PostgreSQL Managed Database
